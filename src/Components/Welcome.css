@@ -1,0 +1,14 @@
+.incomplete-profile {
+  background-color: lightgray;
+  width: 20%;
+  margin-left: auto;
+  margin-top: -2%;
+  border-radius: 8px;
+  padding: 0px 4px;
+}
+
+.complete-button {
+  background-color: lightgrey;
+  border: none;
+  color: blue;
+}

@@ -1,0 +1,24 @@
+.update-form {
+  border: 2px solid grey;
+  width: 50%;
+  margin-left: auto;
+  height: 60%;
+  padding: 2%;
+}
+
+.update-form input {
+  margin: 15px;
+}
+.update {
+  background-color: rgb(164, 68, 68);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 4px 4px;
+}
+
+.cancel {
+  border-color: red;
+  color: red;
+  margin-left: 70%;
+}
