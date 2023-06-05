@@ -1,18 +1,42 @@
 import { BsGithub } from "react-icons/bs";
 import { SlGlobe } from "react-icons/sl";
 import "./UpdateProfile.css";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const UpdateProfilePage = () => {
   const name = useRef();
   const photo = useRef();
+  const idToken = localStorage.getItem("idToken");
+
+  useEffect(() => {
+    const getData = async () => {
+      await fetch(
+        "https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=AIzaSyDCmTIASTuulEriFSISbea5nwsyumajLB4",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            idToken,
+          }),
+          headers: {
+            "Content-type": "application/json",
+          },
+        }
+      ).then((res) => {
+        if (res.ok) {
+          res.json().then((data) => {
+            name.current.value = data.users[0].displayName;
+            photo.current.value = data.users[0].photoUrl;
+          });
+        }
+      });
+    };
+    getData();
+  }, [idToken]);
 
   const updateProfile = (event) => {
     event.preventDefault();
     const enteredName = name.current.value;
     const enteredPhoto = photo.current.value;
-    const idToken = localStorage.getItem("idToken");
-    console.log(idToken);
     fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDCmTIASTuulEriFSISbea5nwsyumajLB4",
       {
@@ -27,9 +51,7 @@ const UpdateProfilePage = () => {
           "Content-type": "application/json",
         },
       }
-    ).then((res) => {
-      res.json().then((data) => console.log(data));
-    });
+    );
   };
 
   return (
