@@ -3,8 +3,31 @@ import { useNavigate } from "react-router-dom";
 
 const Welcome = () => {
   const navigate = useNavigate();
+  const idToken = localStorage.getItem("idToken");
+
   const completeProfile = () => {
     navigate("/updateProfile");
+  };
+
+  const verifyEmail = () => {
+    fetch(
+      "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDCmTIASTuulEriFSISbea5nwsyumajLB4",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          requestType: "VERIFY_EMAIL",
+          idToken,
+        }),
+        headers: {
+          "Content-type": "application/json",
+        },
+      }
+    ).then((res) => {
+      if (res.ok) {
+      } else {
+        res.json().then((data) => alert(data.error.message));
+      }
+    });
   };
 
   return (
@@ -19,6 +42,7 @@ const Welcome = () => {
         </p>
       </div>
       <hr />
+      <button onClick={verifyEmail}>Verify email</button>
     </div>
   );
 };
