@@ -8,12 +8,16 @@ import UpdateProfilePage from "./Components/UpdateProfilePage";
 function App() {
   return (
     <div className="App">
-      <NavbarComponent />
       <BrowserRouter>
+        <NavbarComponent />
         <Routes>
-          <Route path="/" element={<SignUp />}></Route>
-          <Route path="/welcome" element={<Welcome />}></Route>
-          <Route path="/updateProfile" element={<UpdateProfilePage />}></Route>
+          <Route exact path="/" element={<SignUp />}></Route>
+          <Route exact path="/welcome" element={<Welcome />}></Route>
+          <Route
+            exact
+            path="/updateProfile"
+            element={<UpdateProfilePage />}
+          ></Route>
         </Routes>
       </BrowserRouter>
     </div>
