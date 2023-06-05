@@ -1,5 +1,6 @@
 import "./Welcome.css";
 import { useNavigate } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 const Welcome = () => {
   const navigate = useNavigate();
@@ -7,6 +8,10 @@ const Welcome = () => {
 
   const completeProfile = () => {
     navigate("/updateProfile");
+  };
+
+  const addExpenses = () => {
+    navigate("/add-expenses");
   };
 
   const verifyEmail = () => {
@@ -42,7 +47,11 @@ const Welcome = () => {
         </p>
       </div>
       <hr />
-      <button onClick={verifyEmail}>Verify email</button>
+      <button className="verify-button" onClick={verifyEmail}>
+        Verify email
+      </button>
+      <br />
+      <Button onClick={addExpenses}>ADD EXPENSES</Button>
     </div>
   );
 };

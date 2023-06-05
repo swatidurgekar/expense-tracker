@@ -1,10 +1,12 @@
 import Form from "react-bootstrap/Form";
 import "./SignUp.css";
 import Button from "react-bootstrap/Button";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "./Store/AuthContext";
 
 const SignUp = () => {
+  const authCtx = useContext(AuthContext);
   const [isLogin, setIsLogin] = useState(false);
   const email = useRef();
   const password = useRef();
@@ -39,9 +41,10 @@ const SignUp = () => {
         }
       ).then((res) => {
         if (res.ok) {
-          res
-            .json()
-            .then((data) => localStorage.setItem("idToken", data.idToken));
+          authCtx.isLoggedIn();
+          res.json().then((data) => {
+            localStorage.setItem("idToken", data.idToken);
+          });
           navigate("/welcome");
         } else {
           res.json().then((data) => {

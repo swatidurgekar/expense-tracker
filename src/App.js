@@ -5,8 +5,13 @@ import Welcome from "./Components/Welcome";
 import NavbarComponent from "./Components/NavbarComponent";
 import UpdateProfilePage from "./Components/UpdateProfilePage";
 import ForgotPassword from "./Components/ForgotPassword";
+import AddExpenses from "./Components/AddExpenses";
+import { AuthContext } from "./Components/Store/AuthContext";
+import { useContext } from "react";
 
 function App() {
+  const authCtx = useContext(AuthContext);
+
   return (
     <div className="App">
       <BrowserRouter>
@@ -24,6 +29,9 @@ function App() {
             path="forgot-password"
             element={<ForgotPassword />}
           ></Route>
+          {authCtx.islogin && (
+            <Route exact path="add-expenses" element={<AddExpenses />}></Route>
+          )}
         </Routes>
       </BrowserRouter>
     </div>
