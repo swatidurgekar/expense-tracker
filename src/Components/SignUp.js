@@ -15,6 +15,10 @@ const SignUp = () => {
     setIsLogin((prevState) => !prevState);
   };
 
+  const forgotPassword = () => {
+    navigate("/forgot-password");
+  };
+
   const submitHandler = async (event) => {
     event.preventDefault();
     const enteredEmail = email.current.value;
@@ -90,6 +94,10 @@ const SignUp = () => {
               <Form.Control ref={confirmPassword} type="password" required />
             </Form.Group>
           )}
+          <button onClick={forgotPassword} className="forgot-password">
+            Forgot password?
+          </button>
+          <br />
           <Button type="submit" variant="primary">
             {isLogin ? "Login" : "Sign Up"}
           </Button>

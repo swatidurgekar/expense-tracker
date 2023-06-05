@@ -4,6 +4,7 @@ import SignUp from "./Components/SignUp";
 import Welcome from "./Components/Welcome";
 import NavbarComponent from "./Components/NavbarComponent";
 import UpdateProfilePage from "./Components/UpdateProfilePage";
+import ForgotPassword from "./Components/ForgotPassword";
 
 function App() {
   return (
@@ -17,6 +18,11 @@ function App() {
             exact
             path="/updateProfile"
             element={<UpdateProfilePage />}
+          ></Route>
+          <Route
+            exact
+            path="forgot-password"
+            element={<ForgotPassword />}
           ></Route>
         </Routes>
       </BrowserRouter>

@@ -17,3 +17,9 @@
 .login-button {
   margin: 2%;
 }
+
+.forgot-password {
+  border: none;
+  background-color: white;
+  margin-bottom: 9%;
+}
