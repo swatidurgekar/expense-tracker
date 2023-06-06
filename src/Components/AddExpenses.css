@@ -31,3 +31,15 @@
   width: 40%;
   margin: auto;
 }
+
+.expense-delete-button {
+  background-color: rgb(244, 84, 84);
+  border: none;
+  margin-left: 5%;
+}
+
+.expense-edit-button {
+  background-color: rgb(139, 246, 139);
+  border: none;
+  margin-left: 5%;
+}
