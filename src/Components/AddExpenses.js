@@ -1,22 +1,38 @@
 import "./AddExpenses.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import axios from "axios";
 
 const AddExpenses = () => {
+  const url = "https://react-expense-tracker-e1978-default-rtdb.firebaseio.com";
   const money = useRef();
   const description = useRef();
   const category = useRef();
   const [expenses, setExpenses] = useState([]);
 
-  const submitHandler = (event) => {
+  useEffect(() => {
+    async function getExpenses() {
+      const res = await axios.get(`${url}/expenses.json`);
+      const expenses = Object.values(res.data);
+      setExpenses(expenses);
+    }
+    getExpenses();
+  }, []);
+
+  const submitHandler = async (event) => {
     event.preventDefault();
     const enteredMoney = money.current.value;
     const enteredDesc = description.current.value;
     const enteredCategory = category.current.value;
     const newExpense = { enteredMoney, enteredDesc, enteredCategory };
-    setExpenses((prevExpenses) => {
-      return [...prevExpenses, newExpense];
+
+    axios.post(`${url}/expenses.json`, newExpense).then((res) => {
+      if (res.statusText) {
+        setExpenses((prevExpense) => {
+          return [...prevExpense, newExpense];
+        });
+      }
     });
   };
 
@@ -52,7 +68,7 @@ const AddExpenses = () => {
           <hr />
           {expenses.map((item) => {
             return (
-              <div>
+              <div key={item.enteredDesc}>
                 <li>{`${item.enteredMoney}$ ${item.enteredDesc} ${item.enteredCategory}`}</li>
                 <hr />
               </div>

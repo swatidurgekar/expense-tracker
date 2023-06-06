@@ -9,7 +9,7 @@ export const AuthContext = createContext({
 
 export const AuthContextProvider = (props) => {
   const token = localStorage.getItem("idToken");
-  const [islogin, setIsLogin] = useState(false);
+  const [islogin, setIsLogin] = useState();
   const [idToken, setIdToken] = useState(token);
 
   const login = () => {
@@ -22,7 +22,7 @@ export const AuthContextProvider = (props) => {
   };
 
   const authContext = {
-    islogin: islogin,
+    islogin: !!idToken,
     isLoggedIn: login,
     idToken: idToken,
     logout: logoutHandler,
