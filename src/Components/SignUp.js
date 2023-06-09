@@ -3,10 +3,11 @@ import "./SignUp.css";
 import Button from "react-bootstrap/Button";
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "./Store/AuthContext";
+import { useSelector, useDispatch } from "react-redux";
+import { authActions } from "./Store/Auth";
 
 const SignUp = () => {
-  const authCtx = useContext(AuthContext);
+  const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(false);
   const email = useRef();
   const password = useRef();
@@ -41,9 +42,10 @@ const SignUp = () => {
         }
       ).then((res) => {
         if (res.ok) {
-          authCtx.isLoggedIn();
+          dispatch(authActions.login());
           res.json().then((data) => {
             localStorage.setItem("idToken", data.idToken);
+            dispatch(authActions.token(data.idToken));
           });
           navigate("/welcome");
         } else {

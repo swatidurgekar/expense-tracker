@@ -2,11 +2,12 @@ import { BsGithub } from "react-icons/bs";
 import { SlGlobe } from "react-icons/sl";
 import "./UpdateProfile.css";
 import { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 
 const UpdateProfilePage = () => {
   const name = useRef();
   const photo = useRef();
-  const idToken = localStorage.getItem("idToken");
+  const idToken = useSelector((state) => state.auth.bearerToken);
 
   useEffect(() => {
     const getData = async () => {

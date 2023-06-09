@@ -3,38 +3,55 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { AuthContext } from "./Store/AuthContext";
+// import { AuthContext } from "./Store/AuthContext";
+import { useDispatch, useSelector } from "react-redux";
+import { expensesActions } from "./Store/Expenses";
 
 const AddExpenses = () => {
   const url = "https://react-expense-tracker-e1978-default-rtdb.firebaseio.com";
   const money = useRef();
   const description = useRef();
   const category = useRef();
-  // const [expenses, setExpenses] = useState([]);
-  // const [editing, setEditing] = useState(false);
-  const authCtx = useContext(AuthContext);
+  const [editing, setEditing] = useState(false);
+  const [editingKey, setEditingKey] = useState(null);
+  const [premium, setPremium] = useState(false);
+  const dispatch = useDispatch();
+  const addedExpense = useSelector((state) => state.expense.expenses);
 
-  // useEffect(() => {
-  //   async function getExpenses() {
-  //     const res = await axios.get(`${url}/expenses.json`);
-  //     const expenses = Object.values(res.data);
-  //     setExpenses(expenses);
-  //   }
-  //   getExpenses();
-  // }, [expenses]);
+  // const authCtx = useContext(AuthContext);
+
+  useEffect(() => {
+    async function getExpenses() {
+      const res = await axios.get(`${url}/expenses.json`);
+      if (res.data) {
+        const expenses = Object.values(res.data);
+        dispatch(expensesActions.fetchExpense(expenses));
+      }
+    }
+    getExpenses();
+  }, []);
 
   const deleteExpense = async (item) => {
     const res = await axios.get(`${url}/expenses.json`);
     const keys = Object.keys(res.data);
     keys.map((expenseKey) => {
       if (res.data[expenseKey].enteredDesc === item.enteredDesc) {
-        axios.delete(`${url}/expenses/${expenseKey}.json`);
+        axios.delete(`${url}/expenses/${expenseKey}.json`).then(() => {
+          const newRes = axios.get(`${url}/expenses.json`).then((res) => {
+            if (res.data) {
+              const newExpense = Object.values(res.data);
+              dispatch(expensesActions.fetchExpense(newExpense));
+            } else {
+              dispatch(expensesActions.fetchExpense([]));
+            }
+          });
+        });
       }
     });
   };
 
   const editExpense = async (item) => {
-    authCtx.edit();
+    setEditing(true);
     money.current.value = item.enteredMoney;
     description.current.value = item.enteredDesc;
     category.current.value = item.enteredCategory;
@@ -42,7 +59,7 @@ const AddExpenses = () => {
     const keys = Object.keys(res.data);
     keys.map((expenseKey) => {
       if (res.data[expenseKey].enteredDesc === item.enteredDesc) {
-        authCtx.editKey(expenseKey);
+        setEditingKey(expenseKey);
       }
     });
   };
@@ -54,12 +71,44 @@ const AddExpenses = () => {
     const enteredCategory = category.current.value;
     const newExpense = { enteredMoney, enteredDesc, enteredCategory };
 
-    authCtx.addExpense(newExpense);
+    if (editing) {
+      let sum = 0;
+      axios.put(`${url}/expenses/${editingKey}.json`, newExpense).then(() => {
+        axios.get(`${url}/expenses.json`).then((res) => {
+          const newExpense = Object.values(res.data);
+          dispatch(expensesActions.fetchExpense(newExpense));
+          newExpense.forEach((element) => {
+            sum += +element.enteredMoney;
+          });
+          if (sum >= 10000) {
+            setPremium(true);
+          }
+        });
+      });
+    } else {
+      let sum = 0;
+      dispatch(expensesActions.addExpense(newExpense));
+      axios.post(`${url}/expenses.json`, newExpense).then(() => {
+        axios.get(`${url}/expenses.json`).then((res) => {
+          const newExpense = Object.values(res.data);
+          newExpense.forEach((element) => {
+            sum += +element.enteredMoney;
+          });
+          if (sum >= 10000) {
+            setPremium(true);
+            console.log(sum);
+          }
+        });
+      });
+    }
+    setEditing(false);
+    setEditingKey(null);
   };
 
   return (
     <div className="add-expenses-div">
       <h6 className="add-expenses-header">Add income and expenses daily</h6>
+
       <div className="add-expenses-form">
         <Form onSubmit={submitHandler}>
           <Form.Group className="mb-3">
@@ -82,15 +131,16 @@ const AddExpenses = () => {
           <Button type="submit">Add expense</Button>
         </Form>
       </div>
-      {authCtx.expenses && (
+      {addedExpense && (
         <div className="expenses">
           <h5>Expenses</h5>
           <hr />
-          {authCtx.expenses.map((item) => {
+          {addedExpense.map((item) => {
             return (
               <div key={item.enteredDesc}>
                 <li>
                   {`${item.enteredMoney}$ ${item.enteredDesc} ${item.enteredCategory}`}
+
                   <button
                     onClick={() => {
                       editExpense(item);
@@ -111,6 +161,7 @@ const AddExpenses = () => {
               </div>
             );
           })}
+          {premium && <button>ACTIVATE PREMIUM</button>}
         </div>
       )}
     </div>

@@ -8,9 +8,11 @@ import ForgotPassword from "./Components/ForgotPassword";
 import AddExpenses from "./Components/AddExpenses";
 import { AuthContext } from "./Components/Store/AuthContext";
 import { useContext } from "react";
+import { useSelector } from "react-redux";
 
 function App() {
   const authCtx = useContext(AuthContext);
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return (
     <div className="App">
@@ -18,7 +20,9 @@ function App() {
         <NavbarComponent />
         <Routes>
           <Route exact path="/" element={<SignUp />}></Route>
-          <Route exact path="/welcome" element={<Welcome />}></Route>
+          {isAuthenticated && (
+            <Route exact path="/welcome" element={<Welcome />}></Route>
+          )}
           <Route
             exact
             path="/updateProfile"
@@ -29,7 +33,7 @@ function App() {
             path="forgot-password"
             element={<ForgotPassword />}
           ></Route>
-          {authCtx.islogin && (
+          {isAuthenticated && (
             <Route exact path="add-expenses" element={<AddExpenses />}></Route>
           )}
         </Routes>
