@@ -1,12 +1,20 @@
 .add-expenses-div {
   height: 100%;
   width: 100%;
-  background-color: rgb(243, 98, 122);
   padding: 2%;
 }
+.dark-add-expenses-div {
+  height: 100%;
+  width: 100%;
+  padding: 2%;
+  background-color: black;
+}
 
-.add-expenses-header {
+.dark-add-expenses-header {
   color: white;
+}
+.add-expenses-header {
+  color: black;
 }
 
 .add-expenses-form {
@@ -19,10 +27,25 @@
   margin-left: auto;
   margin-right: auto;
 }
+.dark-add-expenses-form {
+  border: 2px solid white;
+  padding: 2% 2%;
+  height: 45%;
+  width: 35%;
+  margin-top: 5%;
+  margin-bottom: 5%;
+  margin-left: auto;
+  margin-right: auto;
+}
 
 .add-expenses-form label {
   margin-bottom: 10px;
   font-weight: bold;
+}
+.dark-add-expenses-form label {
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: white;
 }
 
 .expenses {

@@ -6,12 +6,9 @@ import NavbarComponent from "./Components/NavbarComponent";
 import UpdateProfilePage from "./Components/UpdateProfilePage";
 import ForgotPassword from "./Components/ForgotPassword";
 import AddExpenses from "./Components/AddExpenses";
-import { AuthContext } from "./Components/Store/AuthContext";
-import { useContext } from "react";
 import { useSelector } from "react-redux";
 
 function App() {
-  const authCtx = useContext(AuthContext);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return (

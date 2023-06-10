@@ -15,7 +15,6 @@ const AuthSlice = createSlice({
     },
     token(state, action) {
       state.bearerToken = action.payload;
-      console.log(state.bearerToken);
     },
   },
 });
