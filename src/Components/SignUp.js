@@ -1,9 +1,9 @@
 import Form from "react-bootstrap/Form";
 import "./SignUp.css";
 import Button from "react-bootstrap/Button";
-import { useContext, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { authActions } from "./Store/Auth";
 
 const SignUp = () => {
@@ -45,7 +45,9 @@ const SignUp = () => {
           dispatch(authActions.login());
           res.json().then((data) => {
             localStorage.setItem("idToken", data.idToken);
+            localStorage.setItem("email", enteredEmail);
             dispatch(authActions.token(data.idToken));
+            dispatch(authActions.email(data.email));
           });
           navigate("/welcome");
         } else {

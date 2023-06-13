@@ -1,10 +1,11 @@
 import "./Welcome.css";
 import { useNavigate } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import { useSelector } from "react-redux";
 
 const Welcome = () => {
   const navigate = useNavigate();
-  const idToken = localStorage.getItem("idToken");
+  const idToken = useSelector((state) => state.auth.bearerToken);
 
   const completeProfile = () => {
     navigate("/updateProfile");

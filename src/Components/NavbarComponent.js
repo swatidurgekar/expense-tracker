@@ -8,6 +8,7 @@ const NavbarComponent = () => {
   const dispatch = useDispatch();
   const logout = () => {
     localStorage.removeItem("idToken");
+    localStorage.removeItem("email");
     dispatch(authActions.logout());
   };
 

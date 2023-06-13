@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 const bearerToken = localStorage.getItem("idToken");
-const initialState = { isAuthenticated: !!bearerToken, bearerToken };
+const email = localStorage.getItem("email");
+const initialState = { isAuthenticated: !!bearerToken, bearerToken, email };
 
 const AuthSlice = createSlice({
   name: "auth",
@@ -15,6 +16,9 @@ const AuthSlice = createSlice({
     },
     token(state, action) {
       state.bearerToken = action.payload;
+    },
+    email(state, action) {
+      state.email = action.payload;
     },
   },
 });

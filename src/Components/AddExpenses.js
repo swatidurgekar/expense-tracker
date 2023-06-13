@@ -2,7 +2,7 @@ import "./AddExpenses.css";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { useEffect, useRef, useState } from "react";
-import axios from "axios";
+// const axios = require("axios/dist/node/axios.cjs");
 import { useDispatch, useSelector } from "react-redux";
 import { expensesActions } from "./Store/Expenses";
 import { themeActions } from "./Store/Theme";
@@ -18,10 +18,16 @@ const AddExpenses = () => {
   const dispatch = useDispatch();
   const addedExpense = useSelector((state) => state.expense.expenses);
   const theme = useSelector((state) => state.theme.theme);
+  const email = useSelector((state) => state.auth.email);
+
+  let newEmail;
+  if (email) {
+    newEmail = email.replace(/[@.]/g, "");
+  }
 
   useEffect(() => {
     async function getExpenses() {
-      const res = await axios.get(`${url}/expenses.json`);
+      const res = await axios.get(`${url}/${newEmail}.json`);
       if (res.data) {
         const expenses = Object.values(res.data);
         dispatch(expensesActions.fetchExpense(expenses));
@@ -47,12 +53,12 @@ const AddExpenses = () => {
   }, [addedExpense]);
 
   const deleteExpense = async (item) => {
-    const res = await axios.get(`${url}/expenses.json`);
+    const res = await axios.get(`${url}/${newEmail}.json`);
     const keys = Object.keys(res.data);
     keys.map((expenseKey) => {
       if (res.data[expenseKey].enteredDesc === item.enteredDesc) {
-        axios.delete(`${url}/expenses/${expenseKey}.json`).then(() => {
-          const newRes = axios.get(`${url}/expenses.json`).then((res) => {
+        axios.delete(`${url}/${newEmail}/${expenseKey}.json`).then(() => {
+          const newRes = axios.get(`${url}/${newEmail}.json`).then((res) => {
             if (res.data) {
               const newExpense = Object.values(res.data);
               dispatch(expensesActions.fetchExpense(newExpense));
@@ -70,7 +76,7 @@ const AddExpenses = () => {
     money.current.value = item.enteredMoney;
     description.current.value = item.enteredDesc;
     category.current.value = item.enteredCategory;
-    const res = await axios.get(`${url}/expenses.json`);
+    const res = await axios.get(`${url}/${newEmail}.json`);
     const keys = Object.keys(res.data);
     keys.map((expenseKey) => {
       if (res.data[expenseKey].enteredDesc === item.enteredDesc) {
@@ -87,16 +93,18 @@ const AddExpenses = () => {
     const newExpense = { enteredMoney, enteredDesc, enteredCategory };
 
     if (editing) {
-      axios.put(`${url}/expenses/${editingKey}.json`, newExpense).then(() => {
-        axios.get(`${url}/expenses.json`).then((res) => {
-          const newExpense = Object.values(res.data);
-          dispatch(expensesActions.fetchExpense(newExpense));
+      axios
+        .put(`${url}/${newEmail}/${editingKey}.json`, newExpense)
+        .then(() => {
+          axios.get(`${url}/${newEmail}.json`).then((res) => {
+            const newExpense = Object.values(res.data);
+            dispatch(expensesActions.fetchExpense(newExpense));
+          });
         });
-      });
     } else {
       dispatch(expensesActions.addExpense(newExpense));
-      axios.post(`${url}/expenses.json`, newExpense).then(() => {
-        axios.get(`${url}/expenses.json`).then((res) => {});
+      axios.post(`${url}/${newEmail}.json`, newExpense).then(() => {
+        axios.get(`${url}/${newEmail}.json`).then((res) => {});
       });
     }
     setEditing(false);
