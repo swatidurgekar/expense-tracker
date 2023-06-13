@@ -112,7 +112,8 @@ const SignUp = () => {
       </div>
 
       <Button onClick={checkLogin} variant="secondary" className="login-button">
-        {isLogin ? "Dont't have an account? SignUp" : "Have an account? Login"}
+        {isLogin && "Dont't have an account? SignUp"}
+        {!isLogin && "Have an account? Login"}
       </Button>
     </div>
   );

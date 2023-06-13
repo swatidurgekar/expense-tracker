@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { expensesActions } from "./Store/Expenses";
 import { themeActions } from "./Store/Theme";
+import axios from "axios";
 
 const AddExpenses = () => {
   const url = "https://react-expense-tracker-e1978-default-rtdb.firebaseio.com";

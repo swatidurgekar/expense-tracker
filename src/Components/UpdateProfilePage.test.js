@@ -5,17 +5,11 @@ import store from "./Store";
 
 describe("updateProfilePage component", () => {
   test("renders Contact Details as a text", () => {
-    //arrange
     render(
       <Provider store={store}>
         <UpdateProfilePage />
       </Provider>
     );
-
-    //act
-    //...nothing
-
-    //assert
     const contactDetails = screen.getByText("Contact Details");
     expect(contactDetails).toBeInTheDocument();
   });
