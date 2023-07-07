@@ -148,6 +148,7 @@ const AddExpenses = () => {
           {theme && <button onClick={lightMode}>Light mode</button>}
         </div>
       )}
+      <h5>{premium ? "" : "Activate premium for expenses above $10000 "}</h5>
       <h6
         className={theme ? "dark-add-expenses-header" : "add-expenses-header"}
       >
